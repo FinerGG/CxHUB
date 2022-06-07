@@ -1,4 +1,18 @@
-    
+    local ScreenGui = Instance.new("ScreenGui")
+    local ImageButton = Instance.new("ImageButton")
+
+    ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+
+    ImageButton.Parent = ScreenGui
+    ImageButton.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    ImageButton.Position = UDim2.new(0.120833337, 0, 0.0952890813, 0)
+    ImageButton.Size = UDim2.new(0, 50, 0, 50)
+    ImageButton.Image = "rbxassetid://9639629244"
+    ImageButton.MouseButton1Down:connect(function()
+        game:GetService("VirtualInputManager"):SendKeyEvent(true,305,false,game)
+        game:GetService("VirtualInputManager"):SendKeyEvent(false,305,false,game)
+    end)
+
     game:GetService("Players").LocalPlayer.Idled:connect(function()
         game:GetService("VirtualUser"):Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
         wait(1)
@@ -1041,8 +1055,9 @@ spawn(function()
        end
 end)
 
-    Main:AddToggle("Auto Farm",false,function(value)
-        _G.AutoFarm = value
+Main:AddToggle("Auto Farm",false,function(vn)
+ps = vn
+_G.AutoFarm = vn
     if _G.AutoFarm == false then return end
     while _G.AutoFarm do task.wait()
 game.Players.localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-53.5657, 30, -345.507)
@@ -1052,4 +1067,41 @@ task.wait(0.9)
 game.Players.localPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-55.2557945, -360.81488, 9488.8252, -0.998535872, -0.0466232598, 0.0274300016, -0.0420503132, 0.988007009, 0.148573056, -0.0340279937, 0.147202089, -0.98852092)
 task.wait(16.3)
 end
-    end)
+end)
+
+spawn(function()
+    if game.Players.LocalPlayer.Character.Humanoid.Health <= 0 then
+        _G.AutoFarm = false
+    elseif game.Players.LocalPlayer.Character.Humanoid.Health >= 1 then
+	wait(2)
+        _G.AutoFarm =  true
+    end
+end)
+
+spawn(function()
+			game:GetService("RunService").Stepped:Connect(function()
+				if ps then
+					if syn and game.Players.LocalPlayer.Character:FindFirstChild("Humanoid") then
+						setfflag("HumanoidParallelRemoveNoPhysics", "False")
+						setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "False")
+						game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
+					else
+						if not game:GetService("Workspace"):FindFirstChild("LOL") then
+							local LOL = Instance.new("Part")
+							LOL.Name = "LOL"
+							LOL.Parent = game.Workspace
+							LOL.Anchored = true
+							LOL.Transparency = 0.8
+							LOL.Size = Vector3.new(50,0.5,50)
+						elseif game:GetService("Workspace"):FindFirstChild("LOL") then
+							game.Workspace["LOL"].CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.X,game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Y - 3.8,game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Z)
+						end
+					end
+					for _, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
+						if v:IsA("BasePart") then
+							v.CanCollide = false
+						end
+					end
+				end
+			end)
+		end)
