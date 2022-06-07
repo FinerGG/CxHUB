@@ -1105,3 +1105,7 @@ spawn(function()
 				end
 			end)
 		end)
+
+Main:AddButton("Rejoin",function()
+	game:GetService("TeleportService"):Teleport(game.PlaceId, game:GetService("Players").localPlayer)
+end)
